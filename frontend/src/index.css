@@ -352,6 +352,7 @@ a {
 
 .app-layout {
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .sidebar-container {
@@ -648,6 +649,7 @@ a {
   margin: auto;
 
   padding: 32px;
+  width: 100%;
 }
 
 .page-header {
@@ -2004,4 +2006,83 @@ a {
 .logout-btn:hover {
   background: rgba(239, 68, 68, 0.1);
 }
+}
+
+@media (max-width: 1024px) {
+  .summary-grid,
+  .report-summary-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .summary-grid,
+  .report-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-card,
+  .report-stat,
+  .content-card,
+  .chart-card,
+  .report-categories {
+    padding: 18px;
+  }
+
+  .section-title-row {
+    flex-wrap: wrap;
+  }
+
+  .transaction-item {
+    gap: 10px;
+  }
+
+  .transaction-details {
+    min-width: 0;
+  }
+
+  .transaction-details h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .top-header .user-info {
+    display: none;
+  }
+
+  .top-header {
+    padding: 0 14px;
+  }
+
+  .header-actions {
+    gap: 10px;
+  }
+
+  .page-content {
+    padding: 16px;
+  }
+
+  .dashboard-hero {
+    padding: 0 16px;
+  }
+
+  .dashboard-hero .page-title {
+    overflow-wrap: anywhere;
+  }
+
+  .records-month-header {
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .records-month-right {
+    gap: 8px;
+  }
+
+  .records-month-info h3 {
+    white-space: nowrap;
+  }
 }
