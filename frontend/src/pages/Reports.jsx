@@ -7,7 +7,6 @@ import {
   CalendarDays,
   ChevronDown,
   ChevronUp,
-  IndianRupee,
   Tag,
   Calendar,
   Receipt,
@@ -16,6 +15,10 @@ import {
   Utensils,
   Plane,
   ShoppingBag,
+  Bus,
+  GraduationCap,
+  Clapperboard,
+  Dumbbell,
   HeartPulse,
   CircleEllipsis,
   FileText,
@@ -30,10 +33,13 @@ import Layout from "../components/Layout";
 const CATEGORY_ICONS = {
   Food: Utensils,
   Travel: Plane,
-  Transport: Plane,
+  Transport: Bus,
   Shopping: ShoppingBag,
   Bills: Receipt,
   Health: HeartPulse,
+  Education: GraduationCap,
+  Entertainment: Clapperboard,
+  Fitness: Dumbbell,
   Other: CircleEllipsis,
 };
 

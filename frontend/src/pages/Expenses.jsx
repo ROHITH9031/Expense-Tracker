@@ -18,6 +18,9 @@ function Expenses() {
   const [loading, setLoading] =
     useState(true);
 
+  const [editingExpense, setEditingExpense] =
+    useState(null);
+
   const fetchExpenses = async () => {
     try {
       setLoading(true);
@@ -86,6 +89,32 @@ function Expenses() {
     }
   };
 
+  const updateExpense = async (id, expenseData) => {
+    try {
+      const response = await API.put(
+        `/expenses/${id}`,
+        expenseData
+      );
+
+      const updatedExpense = response.data.data;
+
+      setExpenses((prev) =>
+        prev.map((expense) =>
+          expense._id === id
+            ? updatedExpense
+            : expense
+        )
+      );
+      setEditingExpense(null);
+      toast.success("Expense updated successfully");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to update expense"
+      );
+    }
+  };
+
   useEffect(() => {
     Promise.resolve().then(fetchExpenses);
   }, []);
@@ -105,7 +134,11 @@ function Expenses() {
       </div>
 
       <ExpenseForm
+        key={editingExpense?._id || "new-expense"}
         onAddExpense={addExpense}
+        onUpdateExpense={updateExpense}
+        editingExpense={editingExpense}
+        onCancelEdit={() => setEditingExpense(null)}
       />
 
       <div className="content-card">
@@ -134,6 +167,7 @@ function Expenses() {
             transactions={expenses}
             type="expense"
             onDelete={deleteExpense}
+            onEdit={setEditingExpense}
           />
         )}
       </div>

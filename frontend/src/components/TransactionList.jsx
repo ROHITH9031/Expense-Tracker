@@ -1,4 +1,5 @@
 import {
+  Edit3,
   Trash2,
   Calendar,
   Tag,
@@ -8,6 +9,7 @@ function TransactionList({
   transactions = [],
   type = "expense",
   onDelete,
+  onEdit,
 }) {
   if (transactions.length === 0) {
     return (
@@ -71,6 +73,12 @@ function TransactionList({
                   : "No date"}
               </span>
             </div>
+
+            {item.description && (
+              <p className="transaction-description">
+                {item.description}
+              </p>
+            )}
           </div>
 
           <div className="transaction-right">
@@ -86,15 +94,23 @@ function TransactionList({
               ).toLocaleString("en-IN")}
             </strong>
 
-            <button
-              className="delete-transaction"
-              onClick={() =>
-                onDelete(item._id)
-              }
-              title="Delete"
-            >
-              <Trash2 size={18} />
-            </button>
+            <div className="transaction-actions">
+              <button
+                className="edit-transaction"
+                onClick={() => onEdit(item)}
+                title={`Edit ${type}`}
+              >
+                <Edit3 size={17} />
+              </button>
+
+              <button
+                className="delete-transaction"
+                onClick={() => onDelete(item._id)}
+                title="Delete"
+              >
+                <Trash2 size={18} />
+              </button>
+            </div>
           </div>
         </div>
       ))}

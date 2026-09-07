@@ -1,22 +1,45 @@
 import { useState } from "react";
 
 import {
+  Check,
   Plus,
   ReceiptText,
+  X,
 } from "lucide-react";
 
 function ExpenseForm({
   onAddExpense,
+  onUpdateExpense,
+  editingExpense,
+  onCancelEdit,
 }) {
+  const getEmptyForm = () => ({
+    title: "",
+    amount: "",
+    category: "Food",
+    date: new Date()
+      .toISOString()
+      .split("T")[0],
+    description: "",
+  });
+
+  const getInitialForm = () =>
+    editingExpense
+      ? {
+          title: editingExpense.title || "",
+          amount: editingExpense.amount || "",
+          category: editingExpense.category || "Food",
+          date: editingExpense.date
+            ? new Date(editingExpense.date)
+                .toISOString()
+                .split("T")[0]
+            : getEmptyForm().date,
+          description: editingExpense.description || "",
+        }
+      : getEmptyForm();
+
   const [formData, setFormData] =
-    useState({
-      title: "",
-      amount: "",
-      category: "Food",
-      date: new Date()
-        .toISOString()
-        .split("T")[0],
-    });
+    useState(getInitialForm);
 
   const handleChange = (e) => {
     setFormData({
@@ -28,29 +51,31 @@ function ExpenseForm({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onAddExpense({
+    const payload = {
       ...formData,
       amount: Number(formData.amount),
-    });
+    };
 
-    setFormData({
-      title: "",
-      amount: "",
-      category: "Food",
-      date: new Date()
-        .toISOString()
-        .split("T")[0],
-    });
+    if (editingExpense) {
+      onUpdateExpense(editingExpense._id, payload);
+    } else {
+      onAddExpense(payload);
+      setFormData(getEmptyForm());
+    }
   };
 
   return (
     <div className="content-card">
       <div className="section-title-row">
         <div>
-          <h2>Add Expense</h2>
+            <h2>
+              {editingExpense ? "Edit Expense" : "Add Expense"}
+            </h2>
 
           <p>
-            Record your latest spending.
+              {editingExpense
+                ? "Update the details of this expense."
+                : "Record your latest spending."}
           </p>
         </div>
 
@@ -121,16 +146,41 @@ function ExpenseForm({
               required
             />
           </div>
+
+          <div className="form-group form-group-full">
+            <label>Description</label>
+
+            <textarea
+              name="description"
+              placeholder="Add notes about this expense"
+              value={formData.description}
+              onChange={handleChange}
+              rows="3"
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="add-transaction-button expense-button"
-        >
-          <Plus size={19} />
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="add-transaction-button expense-button"
+          >
+            {editingExpense ? <Check size={19} /> : <Plus size={19} />}
 
-          Add Expense
-        </button>
+            {editingExpense ? "Update Expense" : "Add Expense"}
+          </button>
+
+          {editingExpense && (
+            <button
+              type="button"
+              className="cancel-transaction-button"
+              onClick={onCancelEdit}
+            >
+              <X size={18} />
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

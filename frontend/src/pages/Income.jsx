@@ -18,6 +18,9 @@ function Income() {
   const [loading, setLoading] =
     useState(true);
 
+  const [editingIncome, setEditingIncome] =
+    useState(null);
+
   const fetchIncome = async () => {
     try {
       setLoading(true);
@@ -86,6 +89,32 @@ function Income() {
     }
   };
 
+  const updateIncome = async (id, incomeData) => {
+    try {
+      const response = await API.put(
+        `/income/${id}`,
+        incomeData
+      );
+
+      const updatedIncome = response.data.data;
+
+      setIncome((prev) =>
+        prev.map((item) =>
+          item._id === id
+            ? updatedIncome
+            : item
+        )
+      );
+      setEditingIncome(null);
+      toast.success("Income updated successfully");
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message ||
+          "Failed to update income"
+      );
+    }
+  };
+
   useEffect(() => {
     Promise.resolve().then(fetchIncome);
   }, []);
@@ -105,7 +134,11 @@ function Income() {
       </div>
 
       <IncomeForm
+        key={editingIncome?._id || "new-income"}
         onAddIncome={addIncome}
+        onUpdateIncome={updateIncome}
+        editingIncome={editingIncome}
+        onCancelEdit={() => setEditingIncome(null)}
       />
 
       <div className="content-card">
@@ -134,6 +167,7 @@ function Income() {
             transactions={income}
             type="income"
             onDelete={deleteIncome}
+            onEdit={setEditingIncome}
           />
         )}
       </div>

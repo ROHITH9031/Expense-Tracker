@@ -1,22 +1,45 @@
 import { useState } from "react";
 
 import {
+  Check,
   Plus,
   TrendingUp,
+  X,
 } from "lucide-react";
 
 function IncomeForm({
   onAddIncome,
+  onUpdateIncome,
+  editingIncome,
+  onCancelEdit,
 }) {
+  const getEmptyForm = () => ({
+    title: "",
+    amount: "",
+    category: "Salary",
+    date: new Date()
+      .toISOString()
+      .split("T")[0],
+    description: "",
+  });
+
+  const getInitialForm = () =>
+    editingIncome
+      ? {
+          title: editingIncome.title || "",
+          amount: editingIncome.amount || "",
+          category: editingIncome.category || "Salary",
+          date: editingIncome.date
+            ? new Date(editingIncome.date)
+                .toISOString()
+                .split("T")[0]
+            : getEmptyForm().date,
+          description: editingIncome.description || "",
+        }
+      : getEmptyForm();
+
   const [formData, setFormData] =
-    useState({
-      title: "",
-      amount: "",
-      category: "Salary",
-      date: new Date()
-        .toISOString()
-        .split("T")[0],
-    });
+    useState(getInitialForm);
 
   const handleChange = (e) => {
     setFormData({
@@ -28,29 +51,31 @@ function IncomeForm({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onAddIncome({
+    const payload = {
       ...formData,
       amount: Number(formData.amount),
-    });
+    };
 
-    setFormData({
-      title: "",
-      amount: "",
-      category: "Salary",
-      date: new Date()
-        .toISOString()
-        .split("T")[0],
-    });
+    if (editingIncome) {
+      onUpdateIncome(editingIncome._id, payload);
+    } else {
+      onAddIncome(payload);
+      setFormData(getEmptyForm());
+    }
   };
 
   return (
     <div className="content-card">
       <div className="section-title-row">
         <div>
-          <h2>Add Income</h2>
+          <h2>
+            {editingIncome ? "Edit Income" : "Add Income"}
+          </h2>
 
           <p>
-            Record your latest earnings.
+            {editingIncome
+              ? "Update the details of this income."
+              : "Record your latest earnings."}
           </p>
         </div>
 
@@ -119,16 +144,41 @@ function IncomeForm({
               required
             />
           </div>
+
+          <div className="form-group form-group-full">
+            <label>Description</label>
+
+            <textarea
+              name="description"
+              placeholder="Add notes about this income"
+              value={formData.description}
+              onChange={handleChange}
+              rows="3"
+            />
+          </div>
         </div>
 
-        <button
-          type="submit"
-          className="add-transaction-button income-button"
-        >
-          <Plus size={19} />
+        <div className="form-actions">
+          <button
+            type="submit"
+            className="add-transaction-button income-button"
+          >
+            {editingIncome ? <Check size={19} /> : <Plus size={19} />}
 
-          Add Income
-        </button>
+            {editingIncome ? "Update Income" : "Add Income"}
+          </button>
+
+          {editingIncome && (
+            <button
+              type="button"
+              className="cancel-transaction-button"
+              onClick={onCancelEdit}
+            >
+              <X size={18} />
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
     </div>
   );

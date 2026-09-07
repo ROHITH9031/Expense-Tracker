@@ -968,7 +968,8 @@ a {
 }
 
 .transaction-form input,
-.transaction-form select {
+.transaction-form select,
+.transaction-form textarea {
   width: 100%;
 
   padding: 13px 14px;
@@ -982,6 +983,41 @@ a {
   color: white;
 
   outline: none;
+
+  resize: vertical;
+}
+
+.transaction-form textarea {
+  min-height: 86px;
+  line-height: 1.5;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancel-transaction-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 5px;
+  padding: 13px 22px;
+  border: 1px solid #475569;
+  border-radius: 12px;
+  background: transparent;
+  color: #cbd5e1;
+  font-weight: 700;
+}
+
+.cancel-transaction-button:hover {
+  background: rgba(148, 163, 184, 0.1);
 }
 
 .add-transaction-button {
@@ -1120,12 +1156,25 @@ a {
   gap: 5px;
 }
 
+.transaction-description {
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
 .transaction-right {
   display: flex;
 
   align-items: center;
 
   gap: 14px;
+}
+
+.transaction-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .transaction-amount {
@@ -1166,6 +1215,31 @@ a {
 
   background:
     rgba(239, 68, 68, 0.2);
+}
+
+.edit-transaction {
+  width: 36px;
+  height: 36px;
+
+  display: grid;
+  place-items: center;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: rgba(99, 102, 241, 0.1);
+
+  color: #a5b4fc;
+
+  opacity: 0.7;
+
+  transition: 0.2s;
+}
+
+.edit-transaction:hover {
+  opacity: 1;
+  background: rgba(99, 102, 241, 0.2);
 }
 
 /* =====================
