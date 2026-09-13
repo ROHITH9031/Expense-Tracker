@@ -18,7 +18,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-        "http://localhost:5174",
+      "http://localhost:5174",
+      "https://localhost",
 
       "https://expense-tracker-delta-opal-20.vercel.app",
     ],
